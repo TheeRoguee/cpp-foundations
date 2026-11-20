@@ -1,20 +1,53 @@
-// Month1_Sandbox.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+#include"isEven.h"
 #include <iostream>
+#include<math.h>
+#include<string_view>
+
+//condition ? expression1 : expression2;
+//!(x&& y) is equivalent to !x || !y
+//!(x || y) is equivalent to !x && !y
+
+namespace Goo {
+    int justFunction(int a, int b) {
+        return a - b;
+    }
+}
+
+std::string_view getQuantityPhrase(int num)
+{
+    if (num < 0)
+        return "negative";
+    if (num == 0)
+        return "no";
+    if (num == 1)
+        return "a single";
+    if (num == 2)
+        return "a couple of";
+    if (num == 3)
+        return "a few";
+    return "many";
+}
+
+ std::string getApplesPluralized(int number) {
+     std::string expr{};
+     number == 1 ? (expr = "apple") : (expr = "apples");
+        
+    return expr;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    // for longer nested namespaces : namespace Active = Foo;
+    constexpr int maryApples{ 3 };
+    std::cout << "Mary has " << getQuantityPhrase(maryApples) << ' ' << getApplesPluralized(maryApples) << ".\n";
+
+    std::cout << "How many apples do you have? ";
+    int numApples{};
+    std::cin >> numApples;
+
+    std::cout << "You have " << getQuantityPhrase(numApples) << ' ' << getApplesPluralized(numApples) << ".\n";
+
+    std::cout << Foo::justFunction(5, 10);
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
