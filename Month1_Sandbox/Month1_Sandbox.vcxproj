@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="constants.cpp" />
     <ClCompile Include="isEven.cpp" />
     <ClCompile Include="Month1_Sandbox.cpp" />
   </ItemGroup>

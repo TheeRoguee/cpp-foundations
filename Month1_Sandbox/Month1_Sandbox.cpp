@@ -12,6 +12,8 @@
 
 
 int g_globalNumber{}; //global variable
+double getGravity(); // taken from constants.cpp
+double instantVelocity(int time, double gravity); //taken from constants.cpp
 
 namespace Goo {
 
@@ -59,6 +61,8 @@ int main()
     std::cout << "You have " << getQuantityPhrase(numApples) << ' ' << getApplesPluralized(numApples) << ".\n";
 
     std::cout << Foo::justFunction(5, 10)<<'\n';
+
+    std::cout << instantVelocity(5, getGravity()) <<" instant velocity " << '\n';
 
     int apples{ 5 }; // local variable apples
     {

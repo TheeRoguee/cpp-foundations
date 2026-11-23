@@ -7,6 +7,6 @@ namespace Foo {
     }
 }
 
-constexpr bool isEven(int number) {
+extern constexpr bool isEven(int number) {
 	return number % 2 == 0;
 }
