@@ -26,6 +26,7 @@ namespace Goo {
 
 
 
+
 std::string_view getQuantityPhrase(int num)
 {
     if (num < 0)
@@ -50,6 +51,25 @@ std::string_view getQuantityPhrase(int num)
 
 int main()
 {
+
+    //example switch statement
+    //-----------------------
+    int myNumber{};
+    std::cout << "Give me a number: ";
+    std::cin >> myNumber;
+    switch (myNumber) {
+    case 1:
+        std::cout << 1;
+        break;
+    case 2:
+        std::cout << 2;
+        break;
+    default:
+        std::cout << "Boohoo";
+        break;
+    }
+    //------------------------
+
     // for longer nested namespaces : namespace Active = Foo;
     constexpr int maryApples{ 3 };
     std::cout << "Mary has " << getQuantityPhrase(maryApples) << ' ' << getApplesPluralized(maryApples) << ".\n";
