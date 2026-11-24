@@ -1,5 +1,9 @@
+#include "Random.h"
 #include<iostream>
 #include<math.h>
+#include<random>
+#include<chrono>
+
 
 //goto should be avoided
 
@@ -36,6 +40,40 @@ void fizzBuzz(int upToNumber) {
 
 
 int main() {
+
+	//Instantiate a 32-bit Mersenne Twister
+	//Seed our Mersenne Twister using steady_clock
+	//std::mt19937 mt{ static_cast<std::mt19937::result_type>(std::chrono::steady_clock::now().time_since_epoch().count())}; 
+
+
+	//Seeding with the random device
+	std::mt19937 mt{ std::random_device{}() };
+
+
+	// Create a reusable random number generator that generates uniform numbers between 1 and 6
+	std::uniform_int_distribution sixDie{ 1,6 };
+
+
+	// Print a bunch of random numbers
+	for (int i = 1; i <= 20; i++) {
+		std::cout << sixDie(mt) << '\t';  //generate a roll of the die here
+		if (i % 5 == 0) {
+			std::cout << '\n';
+		}
+	}
+
+	// We can call Random::get() to generate random integral values
+	// If the two arguments have the same type, the returned value will have that same type.
+	std::cout << Random::get(1, 6) << '\n';   // returns int between 1 and 6
+
+	// Let's create a reusable random number generator that generates uniform numbers between 1 and 6
+	std::uniform_int_distribution die6{ 1, 6 };
+	for (int count{ 1 }; count <= 10; ++count)
+	{
+		std::cout << die6(Random::mt) << '\t'; // generate a roll of the die here
+	}
+
+
 
 
 	double x{};
