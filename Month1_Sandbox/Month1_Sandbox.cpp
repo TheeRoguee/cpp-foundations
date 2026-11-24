@@ -1,118 +1,83 @@
-#include"isEven.h"
-#include <iostream>
-#include<math.h>
-#include<string_view>
-
-//condition ? expression1 : expression2;
-//!(x&& y) is equivalent to !x || !y
-//!(x || y) is equivalent to !x && !y
-//! 
-//! Variables declared inside a namespace are also global variables.
-//! Prefer defining global variables inside a namespace rather than in the global namespace.
+//Hi-Lo Game
+#include<cassert>
+#include"random.h"
+#include<iostream>
 
 
-int g_globalNumber{}; //global variable
-double getGravity(); // taken from constants.cpp
-double instantVelocity(int time, double gravity); //taken from constants.cpp
+char getOperator() {
+	while (true) {
+		std::cout << "Chose one of the fallowing: +, -, *, / ";
+		char mathOperator{};
+		std::cin >> mathOperator;
 
-namespace Goo {
-
-    int g_anotherGlobal{};
-
-    int justFunction(int a, int b) {
-        return a - b;
-    }
+		switch (mathOperator) {
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+			return mathOperator;
+		default:
+			std::cout << "Oops, that operator is invalid, try again.";
+		}
+	}
 }
 
-
-
-
-std::string_view getQuantityPhrase(int num)
-{
-    if (num < 0)
-        return "negative";
-    if (num == 0)
-        return "no";
-    if (num == 1)
-        return "a single";
-    if (num == 2)
-        return "a couple of";
-    if (num == 3)
-        return "a few";
-    return "many";
+int getUserNumber() {
+	int number{};
+	std::cout << "Give your guess: ";
+	std::cin >> number;
+	assert(number > 0 && number < 100);
+	return number;
 }
 
- std::string getApplesPluralized(int number) {
-     std::string expr{};
-     number == 1 ? (expr = "apple") : (expr = "apples");
-        
-    return expr;
-}
+int main() {
 
-int main()
-{
+	std::uniform_int_distribution rn{ 1, 100 };
+	int randomNumber{ rn(Random::mt) };
+	int numberOfGuesses{ 1 };
+	bool wantToPlay{ true };
+	char yesNo{};
 
-    //example switch statement
-    //-----------------------
-    int myNumber{};
-    std::cout << "Give me a number: ";
-    std::cin >> myNumber;
-    switch (myNumber) {
-    case 1:
-        std::cout << 1;
-        break;
-    case 2:
-        std::cout << 2;
-        break;
-    default:
-        std::cout << "Boohoo";
-        break;
-    }
-    //------------------------
+	std::cout << "Let's play a game. I'm thinking of a number between 1 and 100. You have 7 tries to guess what it is." << '\n';
 
-    // for longer nested namespaces : namespace Active = Foo;
-    constexpr int maryApples{ 3 };
-    std::cout << "Mary has " << getQuantityPhrase(maryApples) << ' ' << getApplesPluralized(maryApples) << ".\n";
 
-    std::cout << "How many apples do you have? ";
-    int numApples{};
-    std::cin >> numApples;
+	startOfGame:
+	do {
+		std::cout << "Guess # " << numberOfGuesses << '\n';
+		int myNum{ getUserNumber() };
+		if (numberOfGuesses < 7) {
+			if (myNum == randomNumber) {
+				std::cout << "Correct! You win! " << myNum << " = " << randomNumber << " on try: " << numberOfGuesses << '\n';
+				std::cout << "Would you like to play again? y/n: ";
+				std::cin >> yesNo;
+				if (yesNo == 'n' || yesNo == 'N') {
+					break;
+				}
+				else {
+					numberOfGuesses = 0;
+					goto startOfGame;
+				}
+			}
+			else if (myNum < randomNumber) {
+				std::cout << " Your guess is to low ";
+				numberOfGuesses++;
+			}
+			else {
+				std::cout << " Your guess is to high ";
+				numberOfGuesses++;
+			}
+		}
+		else {
+			std::cout << "You lose, no more tries left! Number was: "<<randomNumber;
+			break;
+		}
 
-    std::cout << "You have " << getQuantityPhrase(numApples) << ' ' << getApplesPluralized(numApples) << ".\n";
 
-    std::cout << Foo::justFunction(5, 10)<<'\n';
 
-    std::cout << instantVelocity(5, getGravity()) <<" instant velocity " << '\n';
 
-    int apples{ 5 }; // local variable apples
-    {
-        std::cout << apples << '\n';//prints the main local variable apples
-        int apples{ 10 };//defines a new apples which hides the local apples variable
-        std::cout << apples << '\n';//prints the new apples variable
-    }//inner apples is destroyed here
+	} while (wantToPlay);
 
-    std::cout << apples << '\n';//prints the local variable apples value
 
-    int firstNum{};
-    int largerNum{};
-    int tempStore{};
-    std::cout << "Enter a number: ";
-    std::cin >> firstNum;
-    std::cout << "Enter a larger number: ";
-    std::cin >> largerNum;
 
-    if (largerNum < Goo::g_anotherGlobal) {
-        tempStore = largerNum;
-        largerNum = firstNum;
-        firstNum = tempStore;
-        std::cout << "Swaping the values" << '\n';
-        std::cout << "The smaller value is " << firstNum << '\n';
-        std::cout << "The larger value is " << largerNum << '\n';
-    }
-   
-   std::cout << "The smaller value is " << firstNum << '\n';
-   std::cout << "The larger value is " << largerNum << '\n';
- 
-
-    return 0;
+	return 0;
 }
