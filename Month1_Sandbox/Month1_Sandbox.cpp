@@ -1,82 +1,64 @@
-//Hi-Lo Game
-#include<cassert>
 #include"random.h"
 #include<iostream>
 
 
-char getOperator() {
-	while (true) {
-		std::cout << "Chose one of the fallowing: +, -, *, / ";
-		char mathOperator{};
-		std::cin >> mathOperator;
+//the function return true if user won/ false if he lost
+//we dont use the return value in this program
+//for later it would be usefull to conditionalize other behaivor
 
-		switch (mathOperator) {
-		case '+':
-		case '-':
-		case '*':
-		case '/':
-			return mathOperator;
-		default:
-			std::cout << "Oops, that operator is invalid, try again.";
+bool playHiLo(int guesses, int min, int max) {
+	std::cout << "Lets play HiLo, Im thinking of a number between " << min << " and " << 
+				 max << " . You have " << guesses << " tries to guess what it is" << '\n';
+
+	const int numberToGuess{ Random::get(min,max) };
+	for (int count{ 1 }; count <= guesses; ++count) { // wll run until count reaches number of guesses, if not win it goes out of loop and returns false
+
+		std::cout << "Guess #" << count << " : ";
+		int guess{};
+		std::cin >> guess;
+		if (guess > numberToGuess) {
+			std::cout << "Too high!" << '\n';
+		}
+		else if (guess < numberToGuess) {
+			std::cout << "Too low!" << '\n';
+		}
+		else {
+			std::cout << "Correct! You win!" << '\n';
+			return true; // breaks out of the loop if win and return true
+		}
+	}
+	std::cout << "You lost, out of guesses! The number was: " << numberToGuess << '\n';
+	return false;
+}
+
+
+bool playAgain() {
+	while (true) {
+		std::cout << "Would you like to play again? y/n" << '\n';
+		char choice{};
+		std::cin >> choice;
+		
+		switch (choice) {
+		case 'y': return true;
+		case 'n': return false;
 		}
 	}
 }
 
-int getUserNumber() {
-	int number{};
-	std::cout << "Give your guess: ";
-	std::cin >> number;
-	assert(number > 0 && number < 100);
-	return number;
-}
+
 
 int main() {
 
-	std::uniform_int_distribution rn{ 1, 100 };
-	int randomNumber{ rn(Random::mt) };
-	int numberOfGuesses{ 1 };
-	bool wantToPlay{ true };
-	char yesNo{};
+	constexpr int guesses{ 7 };
+	constexpr int min{ 1 };
+	constexpr int max{ 100 };
 
-	std::cout << "Let's play a game. I'm thinking of a number between 1 and 100. You have 7 tries to guess what it is." << '\n';
-
-
-	startOfGame:
 	do {
-		std::cout << "Guess # " << numberOfGuesses << '\n';
-		int myNum{ getUserNumber() };
-		if (numberOfGuesses < 7) {
-			if (myNum == randomNumber) {
-				std::cout << "Correct! You win! " << myNum << " = " << randomNumber << " on try: " << numberOfGuesses << '\n';
-				std::cout << "Would you like to play again? y/n: ";
-				std::cin >> yesNo;
-				if (yesNo == 'n' || yesNo == 'N') {
-					break;
-				}
-				else {
-					numberOfGuesses = 0;
-					goto startOfGame;
-				}
-			}
-			else if (myNum < randomNumber) {
-				std::cout << " Your guess is to low ";
-				numberOfGuesses++;
-			}
-			else {
-				std::cout << " Your guess is to high ";
-				numberOfGuesses++;
-			}
-		}
-		else {
-			std::cout << "You lose, no more tries left! Number was: "<<randomNumber;
-			break;
-		}
+		playHiLo(guesses, min, max);
+	} while (playAgain());
 
 
-
-
-	} while (wantToPlay);
-
+	std::cout << "Thank you for playing!" << '\n';
 
 
 	return 0;
