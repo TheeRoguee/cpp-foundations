@@ -2,6 +2,7 @@
 #include<iostream>
 #include<cstdlib>
 #include<limits>
+#include<string>
 
 
 void ignoreLine() {
@@ -30,6 +31,25 @@ bool hasUnextractedInput()
 //we dont use the return value in this program
 //for later it would be usefull to conditionalize other behaivor
 
+char choseDificulty() {
+	while (true) {
+		std::cout << "Please choose a dificulty: easy/medium/hard: ";
+		std::string dificulty{};
+		std::getline(std::cin >> std::ws, dificulty);
+
+		if (dificulty == "easy") {
+			return 'e';
+		}
+		else if (dificulty == "medium") {
+			return 'm';
+		}
+		else if (dificulty == "hard") {
+			return 'h';
+		}
+
+		std::cout << "Invalid data! Respect format!" << '\n';
+	}
+}
 
 int userGuess(int min, int max) {
 
@@ -64,9 +84,31 @@ int userGuess(int min, int max) {
 }
 
 
-bool playHiLo(int guesses, int min, int max) {
-	std::cout << "Lets play HiLo, Im thinking of a number between " << min << " and " << 
-				 max << " . You have " << guesses << " tries to guess what it is" << '\n';
+bool playHiLo() {
+	std::cout << "Lets play HiLo!"<<'\n';
+	int guesses{};
+	int min{};
+	int max{};
+	int bestScore{};
+	char setDificulty{ choseDificulty() };
+	if (setDificulty == 'e') {
+		min = 1;
+		max = 50;
+		guesses = 10;
+	}
+	else if (setDificulty == 'm') {
+		min = 1;
+		max = 100;
+		guesses = 7;
+	}
+	else if (setDificulty == 'h') {
+		min = 1;
+		max = 500;
+		guesses = 9;
+	}
+
+	std::cout<<"Im thinking of a number between " << min << " and " << 
+		max << " . You have " << guesses << " tries to guess what it is" << '\n';
 
 	const int numberToGuess{ Random::get(min,max) };
 	for (int count{ 1 }; count <= guesses; ++count) { // wll run until count reaches number of guesses, if not win it goes out of loop and returns false
@@ -94,10 +136,17 @@ bool playAgain() {
 		std::cout << "Would you like to play again? y/n" << '\n';
 		char choice{};
 		std::cin >> choice;
+
+		// clear out any extraneous input
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		
 		switch (choice) {
-		case 'y': return true;
-		case 'n': return false;
+		case 'y':
+		case 'Y':
+			return true;
+		case 'n':
+		case 'N':
+			return false;
 		}
 	}
 }
@@ -106,17 +155,11 @@ bool playAgain() {
 
 int main() {
 
-	constexpr int guesses{ 7 };
-	constexpr int min{ 1 };
-	constexpr int max{ 100 };
-
 	do {
-		playHiLo(guesses, min, max);
+		playHiLo();
 	} while (playAgain());
 
-
 	std::cout << "Thank you for playing!" << '\n';
-
 
 	return 0;
 }
